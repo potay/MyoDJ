@@ -37,6 +37,36 @@ import midi, pprint, random
 #             velocityCounts[currVelocity][nextVelocity] = 1
 #     return noteCounts, tickCounts, velocityCounts
 
+def getNoteAndTickAndVelocityCounts(l):
+    noteCounts = {}
+    velocityCounts = {}
+    for i in xrange(len(l)-1):
+        currNote = l[i][0]
+        nextNote = l[i+1][0]
+        currTick = l[i][1]
+        nextTick = l[i+1][1]
+        currVelocity = l[i][2]
+        nextVelocity = l[i+1][2]
+        if (currNote, currTick) in noteCounts:
+            if (nextNote, nextTick) in noteCounts[(currNote, currTick)]:
+                noteCounts[(currNote, currTick)][(nextNote, nextTick)] += 1
+            else:
+                noteCounts[(currNote, currTick)][(nextNote, nextTick)] = 1
+        else:
+            noteCounts[(currNote, currTick)] = {}
+            noteCounts[(currNote, currTick)][(nextNote, nextTick)] = 1
+        
+        if currVelocity in velocityCounts:
+            if nextVelocity in velocityCounts[currVelocity]:
+                velocityCounts[currVelocity][nextVelocity] += 1
+            else:
+                velocityCounts[currVelocity][nextVelocity] = 1
+        else:
+            velocityCounts[currVelocity] = {}
+            velocityCounts[currVelocity][nextVelocity] = 1
+    pprint.pprint(noteCounts)
+    return noteCounts, velocityCounts
+
 def getMatrix(l):
     counts = getNoteAndTickAndVelocityCounts(l)
     """
