@@ -78,8 +78,7 @@ def getMatrix(l):
     return counts
 
 def createTransMatrix(filename):
-    pattern = midi.read_midifile(filename)
-    # pprint.pprint(pattern)
+    pattern = midi.read_midifile(filename) 
     notesAndTicksAndVelocity = {}
     pitchAndTicks = {}
     pitchAndTickDiffs = {}
@@ -139,9 +138,10 @@ def createTransMatrix(filename):
     matrix = {}
     for track in notesAndTicksAndVelocity:
         matrix[track] = getMatrix(notesAndTicksAndVelocity[track])
-    return matrix, pitchAndTickDiffs
+    # pprint.pprint(matrix)
+    return matrix
 
-def createPattern(matrixDict, pitchAndTickDict):
+def createPattern(matrixDict):
     length = 200
     patternDict = {}
     for track in matrixDict:
@@ -166,8 +166,6 @@ def createPattern(matrixDict, pitchAndTickDict):
             countNoteAndTickSum = sum(matrix[0][startingNoteAndTick].values())
             selectedNoteAndTickCount = random.randrange(1, countNoteAndTickSum + 1)
             for key in matrix[0][startingNoteAndTick]:
-                print "key=", key
-                print matrix[0][startingNoteAndTick]
                 countedNoteAndTickSum += matrix[0][startingNoteAndTick][key]
                 if(countedNoteAndTickSum >= selectedNoteAndTickCount):
                     startingNoteAndTick = key
@@ -229,12 +227,13 @@ def createMidiTrackNotes(patternDict):
         #pprint.pprint(track)
         count += 1
     # print pattern
-    midi.write_midifile("generated_4.mid", pattern)
+    midi.write_midifile("generate_6.mid", pattern)
 
-matrixDict, pitchAndTickDict = createTransMatrix("duke.mid")
+matrixDict = createTransMatrix("duke.mid")
 # pprint.pprint(matrixDict)
 # pprint.pprint(pitchAndTickMatrix)
-patternDict = createPattern(matrixDict, pitchAndTickDict)
-#pprint.pprint(patternDict)
+patternDict = createPattern(matrixDict)
+# print
+# pprint.pprint(patternDict)
 createMidiTrackNotes(patternDict)
 
