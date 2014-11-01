@@ -64,7 +64,6 @@ def getNoteAndTickAndVelocityCounts(l):
         else:
             velocityCounts[currVelocity] = {}
             velocityCounts[currVelocity][nextVelocity] = 1
-    pprint.pprint(noteCounts)
     return noteCounts, velocityCounts
 
 def getMatrix(l):
@@ -147,27 +146,33 @@ def createPattern(matrixDict, pitchAndTickDict):
     patternDict = {}
     for track in matrixDict:
         matrix = matrixDict[track]
-        startingNote = random.choice(matrix[0].keys())
-        # startingTick = random.choice(matrix[1].keys())
-        if startingNote not in pitchAndTickDict:
-            startingNote = (random.choice(pitchAndTickDict.keys()),)
-        startingTick = random.choice(pitchAndTickDict[startingNote[0]])
-        startingVelocity = random.choice(matrix[2].keys())
+        startingNoteAndTick = random.choice(matrix[0].keys())
+        startingNote = startingNoteAndTick[0]
+        startingTick = startingNoteAndTick[1]
+        # if startingNote not in pitchAndTickDict:
+        #     startingNote = (random.choice(pitchAndTickDict.keys()),)
+        # startingTick = random.choice(pitchAndTickDict[startingNote[0]])
+        startingVelocity = random.choice(matrix[1].keys())
         pattern = []
         for singleNote in startingNote:
             pattern.append((singleNote, startingTick, startingVelocity))
 
         for i in xrange(length):
-            countedNoteSum = 0
-            if startingNote not in matrix[0]:
-                startingNote = random.choice(matrix[0].keys())
-            prevNote = startingNote[0]
-            countNoteSum = sum(matrix[0][startingNote].values())
-            selectedNoteCount = random.randrange(1, countNoteSum + 1)
-            for key in matrix[0][startingNote]:
-                countedNoteSum += matrix[0][startingNote][key]
-                if(countedNoteSum >= selectedNoteCount):
-                    startingNote = key
+            
+            countedNoteAndTickSum = 0
+            if startingNoteAndTick not in matrix[0]:
+                startingNoteAndTick = random.choice(matrix[0].keys())
+            # prevNote = startingNote[0]
+            countNoteAndTickSum = sum(matrix[0][startingNoteAndTick].values())
+            selectedNoteAndTickCount = random.randrange(1, countNoteAndTickSum + 1)
+            for key in matrix[0][startingNoteAndTick]:
+                print "key=", key
+                print matrix[0][startingNoteAndTick]
+                countedNoteAndTickSum += matrix[0][startingNoteAndTick][key]
+                if(countedNoteAndTickSum >= selectedNoteAndTickCount):
+                    startingNoteAndTick = key
+                    startingNote = key[0]
+                    startingTick = key[1]
                     break
 
             # while prevNote not in pitchAndTickDict.keys():
@@ -186,12 +191,12 @@ def createPattern(matrixDict, pitchAndTickDict):
                     # break
 
             countedVelocitySum = 0
-            if startingVelocity not in matrix[2]:
-                startingVelocity = random.choice(matrix[2].keys())
-            countVelocitySum = sum(matrix[2][startingVelocity].values())
+            if startingVelocity not in matrix[1]:
+                startingVelocity = random.choice(matrix[1].keys())
+            countVelocitySum = sum(matrix[1][startingVelocity].values())
             selectedVelocityCount = random.randrange(1, countVelocitySum + 1)
-            for key in matrix[2][startingVelocity]:
-                countedVelocitySum += matrix[2][startingVelocity][key]
+            for key in matrix[1][startingVelocity]:
+                countedVelocitySum += matrix[1][startingVelocity][key]
                 if(countedVelocitySum >= selectedVelocityCount):
                     startingVelocity = key
                     break
