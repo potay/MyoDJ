@@ -1,37 +1,5 @@
 import midi, pprint, random
 
-def getNoteLetter(note):
-    if note % 12 == 9:
-        note = "A"
-    elif note % 12 == 10:
-        note = "A#"
-    elif note % 12 == 11:
-        note = "B"
-    elif note % 12 == 0:
-        note = "C"
-    elif note % 12 == 1:
-        note = "C#"
-    elif note % 12 == 2:
-        note = "D"
-    elif note % 12 == 3:
-        note = "D#"
-    elif note % 12 == 4:
-        note = "E"
-    elif note % 12 == 5:
-        note = "F"
-    elif note % 12 == 6:
-        note = "F#"
-    elif note % 12 == 7:
-        note = "G"
-    elif note % 12 == 8:
-        note = "G#"
-    return note
-
-def make2dList(rows, cols, content):
-      a=[]
-      for row in xrange(rows): a += [[content]*cols]
-      return a
-
 def getNoteAndTickAndVelocityCounts(l):
     noteCounts = {}
     tickCounts = {}
@@ -188,16 +156,17 @@ def createMidiTrackNotes(patternDict):
             notesList.append((note, tick, velocity))
 
         for note, tick, velocity in notesList:
+            track.append(midi.NoteOnEvent(tick=0, channel=trackKey[0], data=[note, velocity]))
             track.append(midi.NoteOnEvent(tick=tick, channel=trackKey[0], data=[note, velocity]))
 
         track.append(midi.EndOfTrackEvent(tick=1))
         #print trackKey, ":"
         #pprint.pprint(track)
         count += 1
-    print pattern
+    #print pattern
     midi.write_midifile("generated.mid", pattern)
 
-matrixDict = createTransMatrix("Bass_sample.mid")
+matrixDict = createTransMatrix("duke.mid")
 pprint.pprint(matrixDict)
 patternDict = createPattern(matrixDict)
 #pprint.pprint(patternDict)
