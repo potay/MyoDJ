@@ -1,3 +1,3 @@
 import midi
-pattern = midi.read_midifile("example.mid")
+pattern = midi.read_midifile("duke.mid")
 print pattern
