@@ -33,9 +33,9 @@ def createMidiTrackNotes(*args):
    pattern.append(track)
 
    notesList = []
-   for i in xrange(0, len(args), 2):
-      note = getNoteNumber(args[i])
-      tick = args[i+1]
+   for i in xrange(len(args)):
+      note = getNoteNumber(args[i][0])
+      tick = args[i][1]
       notesList.append((note, tick))
 
    for note, tick in notesList:
@@ -44,7 +44,6 @@ def createMidiTrackNotes(*args):
 
    track.append(midi.EndOfTrackEvent(tick=1))
    print pattern
-   midi.write_midifile("test.mid", pattern)
+   midi.write_midifile("duke2.mid", pattern)
 
-# loop = [("G", 20)*10]
-createMidiTrackNotes("A", 40, "F", 10, "Gsharp", 80)
+createMidiTrackNotes(('D#', 481), ('E', 0), ('B', 0), ('D#', 0), ('B', 0), ('G#', 0), ('B', 0), ('E', 0), ('G#', 0), ('G#', 2), ('D#', 0), ('D#', 0), ('B', 0), ('E', 0), ('B', 0), ('B', 0), ('G#', 0), ('E', 0), ('E', 0), ('G#', 0), ('B', 0), ('D#', 0), ('G#', 0), ('B', 0), ('D#', 0), ('B', 0), ('E', 0), ('E', 240), ('D#', 0), ('E', 0), ('G#', 0), ('G#', 0), ('B', 0), ('D#', 0), ('B', 0), ('B', 0), ('C#', 0), ('F#', 0), ('F#', 0), ('C#', 0), ('A#', 0), ('F#', 0), ('C#', 0), ('G#', 0), ('G#', 180), ('C#', 0), ('A#', 0), ('F#', 0), ('F#', 0), ('C#', 0), ('F#', 0), ('C#', 0), ('G#', 0), ('G#', 0), ('G#', 0), ('D#', 0), ('B', 0), ('D#', 0), ('B', 0), ('D#', 0), ('G#', 240), ('G#', 0), ('G#', 0), ('G#', 0), ('G#', 60), ('G#', 0), ('G#', 0), ('G#', 0), ('G#', 60), ('G#', 0), ('B', 0), ('B', 0), ('B', 0), ('B', 0), ('B', 60), ('B', 0), ('C#', 0), ('C#', 0), ('C#', 60), ('D#', 0), ('D#', 0), ('C#', 0), ('D#', 0), ('D#', 0), ('D#', 60))
