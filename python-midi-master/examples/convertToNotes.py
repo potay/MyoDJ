@@ -107,8 +107,12 @@ def getMatrix(l):
     return counts
 
 def createTransMatrix(filename):
+<<<<<<< HEAD
     pattern = midi.read_midifile(filename)
 <<<<<<< HEAD
+=======
+    pattern = midi.read_midifile(filename) 
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
     notesAndTicksAndVelocity = {}
     pitchAndTicks = {}
     pitchAndTickDiffs = {}
@@ -183,12 +187,17 @@ def createTransMatrix(filename):
             else:
                 j += 1
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     #pprint.pprint(notesAndTicks)
 >>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
+=======
+    
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
     matrix = {}
     for track in notesAndTicksAndVelocity:
         matrix[track] = getMatrix(notesAndTicksAndVelocity[track])
+    # pprint.pprint(matrix)
     return matrix
 
 <<<<<<< HEAD
@@ -221,9 +230,14 @@ def createPattern(matrixDict):
 
         for i in xrange(length):
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+            
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
             countedNoteAndTickSum = 0
             if startingNoteAndTick not in matrix[0]:
                 startingNoteAndTick = random.choice(matrix[0].keys())
+            # prevNote = startingNote[0]
             countNoteAndTickSum = sum(matrix[0][startingNoteAndTick].values())
             selectedNoteAndTickCount = random.randrange(1, countNoteAndTickSum + 1)
             for key in matrix[0][startingNoteAndTick]:
@@ -233,6 +247,21 @@ def createPattern(matrixDict):
                     startingNote = key[0]
                     startingTick = key[1]
                     break
+
+            # while prevNote not in pitchAndTickDict.keys():
+                # prevNote = random.choice(matrix[0].keys())[0]
+            # startingTick = random.choice(pitchAndTickDict[prevNote])
+
+            # countedTickSum = 0
+            # if startingTick not in matrix[1]:
+                # startingTick = random.choice(matrix[1].keys())
+            # countTickSum = sum(matrix[1][startingTick].values())
+            # selectedTickCount = random.randrange(1, countTickSum + 1)
+            # for key in matrix[1][startingTick]:
+                # countedTickSum += matrix[1][startingTick][key]
+                # if(countedTickSum >= selectedTickCount):
+                    # startingTick = key
+                    # break
 
             countedVelocitySum = 0
             if startingVelocity not in matrix[1]:
@@ -275,11 +304,15 @@ def createPattern(matrixDict):
                     break
             for singleNote in startingNote:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 if pattern[len(pattern)-1] != (singleNote, startingTick, startingVelocity):
                     pattern.append((singleNote, startingTick, startingVelocity))
 =======
                 pattern.append((singleNote, roundTo(startingTick, 1), startingVelocity))
 >>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
+=======
+                pattern.append((singleNote, startingTick, startingVelocity))
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
         patternDict[track] = pattern
     return patternDict
 
@@ -300,26 +333,36 @@ def createMidiTrackNotes(patternDict):
 
         for note, tick, velocity in notesList:
 <<<<<<< HEAD
+<<<<<<< HEAD
             track.append(midi.NoteOnEvent(tick=tick, channel=trackKey[0], data=[note, velocity]))
             # track.append(midi.NoteOnEvent(tick=tick, channel=trackKey[0], data=[note, velocity]))
 =======
             track.append(midi.NoteOnEvent(tick=0, channel=trackKey[0], data=[note, velocity]))
             track.append(midi.NoteOnEvent(tick=tick, channel=trackKey[0], data=[note, velocity]))
 >>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
+=======
+            track.append(midi.NoteOnEvent(tick=0, channel=trackKey[0], data=[note, velocity]))
+            track.append(midi.NoteOnEvent(tick=tick, channel=trackKey[0], data=[note, velocity]))
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
 
         track.append(midi.EndOfTrackEvent(tick=1))
         #print trackKey, ":"
         #pprint.pprint(track)
         count += 1
 <<<<<<< HEAD
+<<<<<<< HEAD
     midi.write_midifile("generated_8.mid", pattern)
+=======
+    # print pattern
+    midi.write_midifile("generate_6.mid", pattern)
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
 
 matrixDict = createTransMatrix("duke.mid")
-# good until here
 # pprint.pprint(matrixDict)
 # pprint.pprint(pitchAndTickMatrix)
 patternDict = createPattern(matrixDict)
 # print
+<<<<<<< HEAD
 pprint.pprint(patternDict)
 =======
     print pattern
@@ -330,5 +373,8 @@ matrixDict = createTransMatrix("let_it_go.mid")
 patternDict = createPattern(matrixDict)
 #pprint.pprint(patternDict)
 >>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
+=======
+# pprint.pprint(patternDict)
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
 createMidiTrackNotes(patternDict)
 
