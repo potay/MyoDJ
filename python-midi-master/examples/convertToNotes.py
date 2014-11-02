@@ -1,41 +1,4 @@
-import midi, pprint, random
 
-# def getNoteAndTickAndVelocityCounts(l):
-#     noteCounts = {}
-#     tickCounts = {}
-#     velocityCounts = {}
-#     for i in xrange(len(l)-1):
-#         currNote = l[i][0]
-#         nextNote = l[i+1][0]
-#         currTick = l[i][1]
-#         nextTick = l[i+1][1]
-#         currVelocity = l[i][2]
-#         nextVelocity = l[i+1][2]
-#         if currNote in noteCounts:
-#             if nextNote in noteCounts[currNote]:
-#                 noteCounts[currNote][nextNote] += 1
-#             else:
-#                 noteCounts[currNote][nextNote] = 1
-#         else:
-#             noteCounts[currNote] = {}
-#             noteCounts[currNote][nextNote] = 1
-#         if currTick in tickCounts:
-#             if nextTick in tickCounts[currTick]:
-#                 tickCounts[currTick][nextTick] += 1
-#             else:
-#                 tickCounts[currTick][nextTick] = 1
-#         else:
-#             tickCounts[currTick] = {}
-#             tickCounts[currTick][nextTick] = 1
-#         if currVelocity in velocityCounts:
-#             if nextVelocity in velocityCounts[currVelocity]:
-#                 velocityCounts[currVelocity][nextVelocity] += 1
-#             else:
-#                 velocityCounts[currVelocity][nextVelocity] = 1
-#         else:
-#             velocityCounts[currVelocity] = {}
-#             velocityCounts[currVelocity][nextVelocity] = 1
-#     return noteCounts, tickCounts, velocityCounts
 
 def getNoteAndTickAndVelocityCounts(l):
     noteCounts = {}
@@ -55,7 +18,7 @@ def getNoteAndTickAndVelocityCounts(l):
         else:
             noteCounts[(currNote, currTick)] = {}
             noteCounts[(currNote, currTick)][(nextNote, nextTick)] = 1
-        
+
         if currVelocity in velocityCounts:
             if nextVelocity in velocityCounts[currVelocity]:
                 velocityCounts[currVelocity][nextVelocity] += 1
@@ -65,17 +28,6 @@ def getNoteAndTickAndVelocityCounts(l):
             velocityCounts[currVelocity] = {}
             velocityCounts[currVelocity][nextVelocity] = 1
     return noteCounts, velocityCounts
-
-def getMatrix(l):
-    counts = getNoteAndTickAndVelocityCounts(l)
-    """
-    for row in xrange(len(noteCounts)):
-        sumOfRow = sum(noteCounts[row])
-        if sumOfRow == 0: sumOfRow = 1
-        for col in xrange(len(noteCounts[row])):
-            noteCounts[row][col] = round(noteCounts[row][col]/float(sumOfRow), 4)
-    """
-    return counts
 
 def createTransMatrix(filename):
     pattern = midi.read_midifile(filename)
@@ -115,11 +67,11 @@ def createTransMatrix(filename):
                 while ((type(pattern[i][j]) == midi.events.NoteOnEvent or
                         type(pattern[i][j]) == midi.events.NoteOffEvent) and
                        pattern[i][j].data[1] == prevVelocity):
-                    if (type(pattern[i][j]) == midi.events.NoteOffEvent or 
+                    if (type(pattern[i][j]) == midi.events.NoteOffEvent or
                         velocity == 0):
                         tickDiff = abs(pitchAndTicks[pitch][2] - tick)
                         if pitch in pitchAndTickDiffs:
-                            pitchAndTickDiffs[pitch].append(tickDiff) 
+                            pitchAndTickDiffs[pitch].append(tickDiff)
                         else:
                             pitchAndTickDiffs[pitch] = [tickDiff]
                         pitchAndTicks[pitch] = (False, channel, 0)
@@ -136,7 +88,7 @@ def createTransMatrix(filename):
                 j += 1
     matrix = {}
     for track in notesAndTicksAndVelocity:
-        matrix[track] = getMatrix(notesAndTicksAndVelocity[track])
+        matrix[track] = getNoteAndTickAndVelocityCounts(notesAndTicksAndVelocity[track])
     return matrix
 
 def createPattern(matrixDict):
