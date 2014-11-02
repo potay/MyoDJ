@@ -1,5 +1,6 @@
 import midi, pprint, random
 
+<<<<<<< HEAD
 # def getNoteAndTickAndVelocityCounts(l):
 #     noteCounts = {}
 #     tickCounts = {}
@@ -39,6 +40,11 @@ import midi, pprint, random
 
 def getNoteAndTickAndVelocityCounts(l):
     noteCounts = {}
+=======
+def getNoteAndTickAndVelocityCounts(l):
+    noteCounts = {}
+    tickCounts = {}
+>>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
     velocityCounts = {}
     for i in xrange(len(l)-1):
         currNote = l[i][0]
@@ -47,6 +53,7 @@ def getNoteAndTickAndVelocityCounts(l):
         nextTick = l[i+1][1]
         currVelocity = l[i][2]
         nextVelocity = l[i+1][2]
+<<<<<<< HEAD
         if (currNote, currTick) in noteCounts:
             if (nextNote, nextTick) in noteCounts[(currNote, currTick)]:
                 noteCounts[(currNote, currTick)][(nextNote, nextTick)] += 1
@@ -56,6 +63,24 @@ def getNoteAndTickAndVelocityCounts(l):
             noteCounts[(currNote, currTick)] = {}
             noteCounts[(currNote, currTick)][(nextNote, nextTick)] = 1
         
+=======
+        if currNote in noteCounts:
+            if nextNote in noteCounts[currNote]:
+                noteCounts[currNote][nextNote] += 1
+            else:
+                noteCounts[currNote][nextNote] = 1
+        else:
+            noteCounts[currNote] = {}
+            noteCounts[currNote][nextNote] = 1
+        if currTick in tickCounts:
+            if nextTick in tickCounts[currTick]:
+                tickCounts[currTick][nextTick] += 1
+            else:
+                tickCounts[currTick][nextTick] = 1
+        else:
+            tickCounts[currTick] = {}
+            tickCounts[currTick][nextTick] = 1
+>>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
         if currVelocity in velocityCounts:
             if nextVelocity in velocityCounts[currVelocity]:
                 velocityCounts[currVelocity][nextVelocity] += 1
@@ -64,7 +89,11 @@ def getNoteAndTickAndVelocityCounts(l):
         else:
             velocityCounts[currVelocity] = {}
             velocityCounts[currVelocity][nextVelocity] = 1
+<<<<<<< HEAD
     return noteCounts, velocityCounts
+=======
+    return noteCounts, tickCounts, velocityCounts
+>>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
 
 def getMatrix(l):
     counts = getNoteAndTickAndVelocityCounts(l)
@@ -79,9 +108,14 @@ def getMatrix(l):
 
 def createTransMatrix(filename):
     pattern = midi.read_midifile(filename)
+<<<<<<< HEAD
     notesAndTicksAndVelocity = {}
     pitchAndTicks = {}
     pitchAndTickDiffs = {}
+=======
+    #pprint.pprint(pattern)
+    notesAndTicksAndVelocity = {}
+>>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
     for i in xrange(0, len(pattern)):
         text = ''
         data = tuple([])
@@ -95,6 +129,7 @@ def createTransMatrix(filename):
             elif (type(pattern[i][j]) == midi.events.NoteOnEvent or
                  type(pattern[i][j]) == midi.events.NoteOffEvent):
                 notes = []
+<<<<<<< HEAD
                 pitch = pattern[i][j].data[0]
                 notes.append(pitch)
                 channel = pattern[i][j].channel
@@ -110,11 +145,21 @@ def createTransMatrix(filename):
                 else:
                     velocity = pattern[i][j].data[1]
                     pitchAndTicks[pitch] = (True, channel, tick)
+=======
+                notes.append(pattern[i][j].data[0])
+                channel = pattern[i][j].channel
+                if type(pattern[i][j]) == midi.events.NoteOffEvent:
+                    velocity = 0
+                else:
+                    velocity = pattern[i][j].data[1]
+                tick = pattern[i][j].tick
+>>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
                 prevVelocity = pattern[i][j].data[1]
                 j += 1
                 while ((type(pattern[i][j]) == midi.events.NoteOnEvent or
                         type(pattern[i][j]) == midi.events.NoteOffEvent) and
                        pattern[i][j].data[1] == prevVelocity):
+<<<<<<< HEAD
                     if (type(pattern[i][j]) == midi.events.NoteOffEvent or 
                         velocity == 0):
                         tickDiff = abs(pitchAndTicks[pitch][2] - tick)
@@ -126,6 +171,9 @@ def createTransMatrix(filename):
                     else:
                         pitchAndTicks[pitch] = (True, channel, tick)
                     notes.append(pitch)
+=======
+                    notes.append(pattern[i][j].data[0])
+>>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
                     prevVelocity = pattern[i][j].data[1]
                     j += 1
                 if (channel, text, data) in notesAndTicksAndVelocity:
@@ -134,16 +182,27 @@ def createTransMatrix(filename):
                     notesAndTicksAndVelocity[(channel, text, data)] = [(tuple(notes), tick, velocity)]
             else:
                 j += 1
+<<<<<<< HEAD
+=======
+    #pprint.pprint(notesAndTicks)
+>>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
     matrix = {}
     for track in notesAndTicksAndVelocity:
         matrix[track] = getMatrix(notesAndTicksAndVelocity[track])
     return matrix
 
+<<<<<<< HEAD
+=======
+def roundTo(num, multiple):
+    return int(round(num*1.0/multiple))*multiple
+
+>>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
 def createPattern(matrixDict):
     length = 200
     patternDict = {}
     for track in matrixDict:
         matrix = matrixDict[track]
+<<<<<<< HEAD
         startingNoteAndTick = random.choice(matrix[0].keys())
         startingNote = startingNoteAndTick[0]
         startingTick = startingNoteAndTick[1]
@@ -151,11 +210,17 @@ def createPattern(matrixDict):
         #     startingNote = (random.choice(pitchAndTickDict.keys()),)
         # startingTick = random.choice(pitchAndTickDict[startingNote[0]])
         startingVelocity = random.choice(matrix[1].keys())
+=======
+        startingNote = random.choice(matrix[0].keys())
+        startingTick = random.choice(matrix[1].keys())
+        startingVelocity = random.choice(matrix[2].keys())
+>>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
         pattern = []
         for singleNote in startingNote:
             pattern.append((singleNote, startingTick, startingVelocity))
 
         for i in xrange(length):
+<<<<<<< HEAD
             countedNoteAndTickSum = 0
             if startingNoteAndTick not in matrix[0]:
                 startingNoteAndTick = random.choice(matrix[0].keys())
@@ -176,12 +241,45 @@ def createPattern(matrixDict):
             selectedVelocityCount = random.randrange(1, countVelocitySum + 1)
             for key in matrix[1][startingVelocity]:
                 countedVelocitySum += matrix[1][startingVelocity][key]
+=======
+            countedNoteSum = 0
+            if startingNote not in matrix[0]:
+                startingNote = random.choice(matrix[0].keys())
+            countNoteSum = sum(matrix[0][startingNote].values())
+            selectedNoteCount = random.randrange(1, countNoteSum + 1)
+            for key in matrix[0][startingNote]:
+                countedNoteSum += matrix[0][startingNote][key]
+                if(countedNoteSum >= selectedNoteCount):
+                    startingNote = key
+                    break
+            countedTickSum = 0
+            if startingTick not in matrix[1]:
+                startingTick = random.choice(matrix[1].keys())
+            countTickSum = sum(matrix[1][startingTick].values())
+            selectedTickCount = random.randrange(1, countTickSum + 1)
+            for key in matrix[1][startingTick]:
+                countedTickSum += matrix[1][startingTick][key]
+                if(countedTickSum >= selectedTickCount):
+                    startingTick = key
+                    break
+            countedVelocitySum = 0
+            if startingVelocity not in matrix[2]:
+                startingVelocity = random.choice(matrix[2].keys())
+            countVelocitySum = sum(matrix[2][startingVelocity].values())
+            selectedVelocityCount = random.randrange(1, countVelocitySum + 1)
+            for key in matrix[2][startingVelocity]:
+                countedVelocitySum += matrix[2][startingVelocity][key]
+>>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
                 if(countedVelocitySum >= selectedVelocityCount):
                     startingVelocity = key
                     break
             for singleNote in startingNote:
+<<<<<<< HEAD
                 if pattern[len(pattern)-1] != (singleNote, startingTick, startingVelocity):
                     pattern.append((singleNote, startingTick, startingVelocity))
+=======
+                pattern.append((singleNote, roundTo(startingTick, 1), startingVelocity))
+>>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
         patternDict[track] = pattern
     return patternDict
 
@@ -201,13 +299,19 @@ def createMidiTrackNotes(patternDict):
             notesList.append((note, tick, velocity))
 
         for note, tick, velocity in notesList:
+<<<<<<< HEAD
             track.append(midi.NoteOnEvent(tick=tick, channel=trackKey[0], data=[note, velocity]))
             # track.append(midi.NoteOnEvent(tick=tick, channel=trackKey[0], data=[note, velocity]))
+=======
+            track.append(midi.NoteOnEvent(tick=0, channel=trackKey[0], data=[note, velocity]))
+            track.append(midi.NoteOnEvent(tick=tick, channel=trackKey[0], data=[note, velocity]))
+>>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
 
         track.append(midi.EndOfTrackEvent(tick=1))
         #print trackKey, ":"
         #pprint.pprint(track)
         count += 1
+<<<<<<< HEAD
     midi.write_midifile("generated_8.mid", pattern)
 
 matrixDict = createTransMatrix("duke.mid")
@@ -217,5 +321,14 @@ matrixDict = createTransMatrix("duke.mid")
 patternDict = createPattern(matrixDict)
 # print
 pprint.pprint(patternDict)
+=======
+    print pattern
+    midi.write_midifile("generated.mid", pattern)
+
+matrixDict = createTransMatrix("let_it_go.mid")
+#pprint.pprint(matrixDict)
+patternDict = createPattern(matrixDict)
+#pprint.pprint(patternDict)
+>>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
 createMidiTrackNotes(patternDict)
 
