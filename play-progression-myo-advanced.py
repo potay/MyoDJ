@@ -69,7 +69,7 @@ class MingusHub(Myo.MyoHub):
                 if state != currState:
                     missingNotes, extraPitches = currState.getDiff(state)
                     for note in missingNotes:
-                        fluidsynth.play_Note(c.from_int(note[0]+listener.noteOffset), 1, note[1]*listener.volumeScale)
+                        fluidsynth.play_Note(c.from_int(note[0]+listener.noteOffset), 1, min(note[1]*listener.volumeScale,127))
                     for pitch in extraPitches:
                         fluidsynth.stop_Note(c.from_int(pitch+listener.noteOffset), 1)
                     currState = state
