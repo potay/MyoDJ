@@ -108,8 +108,12 @@ def getMatrix(l):
 
 def createTransMatrix(filename):
 <<<<<<< HEAD
+<<<<<<< HEAD
     pattern = midi.read_midifile(filename)
 <<<<<<< HEAD
+=======
+    pattern = midi.read_midifile(filename) 
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
 =======
     pattern = midi.read_midifile(filename) 
 >>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
@@ -188,9 +192,13 @@ def createTransMatrix(filename):
                 j += 1
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     #pprint.pprint(notesAndTicks)
 >>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
+=======
+    
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
 =======
     
 >>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
@@ -231,6 +239,10 @@ def createPattern(matrixDict):
         for i in xrange(length):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+            
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
 =======
             
 >>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
@@ -305,11 +317,15 @@ def createPattern(matrixDict):
             for singleNote in startingNote:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 if pattern[len(pattern)-1] != (singleNote, startingTick, startingVelocity):
                     pattern.append((singleNote, startingTick, startingVelocity))
 =======
                 pattern.append((singleNote, roundTo(startingTick, 1), startingVelocity))
 >>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
+=======
+                pattern.append((singleNote, startingTick, startingVelocity))
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
 =======
                 pattern.append((singleNote, startingTick, startingVelocity))
 >>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
@@ -334,12 +350,17 @@ def createMidiTrackNotes(patternDict):
         for note, tick, velocity in notesList:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             track.append(midi.NoteOnEvent(tick=tick, channel=trackKey[0], data=[note, velocity]))
             # track.append(midi.NoteOnEvent(tick=tick, channel=trackKey[0], data=[note, velocity]))
 =======
             track.append(midi.NoteOnEvent(tick=0, channel=trackKey[0], data=[note, velocity]))
             track.append(midi.NoteOnEvent(tick=tick, channel=trackKey[0], data=[note, velocity]))
 >>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
+=======
+            track.append(midi.NoteOnEvent(tick=0, channel=trackKey[0], data=[note, velocity]))
+            track.append(midi.NoteOnEvent(tick=tick, channel=trackKey[0], data=[note, velocity]))
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
 =======
             track.append(midi.NoteOnEvent(tick=0, channel=trackKey[0], data=[note, velocity]))
             track.append(midi.NoteOnEvent(tick=tick, channel=trackKey[0], data=[note, velocity]))
@@ -351,7 +372,12 @@ def createMidiTrackNotes(patternDict):
         count += 1
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     midi.write_midifile("generated_8.mid", pattern)
+=======
+    # print pattern
+    midi.write_midifile("generate_6.mid", pattern)
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
 =======
     # print pattern
     midi.write_midifile("generate_6.mid", pattern)
@@ -363,6 +389,7 @@ matrixDict = createTransMatrix("duke.mid")
 patternDict = createPattern(matrixDict)
 # print
 <<<<<<< HEAD
+<<<<<<< HEAD
 pprint.pprint(patternDict)
 =======
     print pattern
@@ -373,6 +400,9 @@ matrixDict = createTransMatrix("let_it_go.mid")
 patternDict = createPattern(matrixDict)
 #pprint.pprint(patternDict)
 >>>>>>> 7cb116ef12f677622f4085b3498ca507a354c9ab
+=======
+# pprint.pprint(patternDict)
+>>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
 =======
 # pprint.pprint(patternDict)
 >>>>>>> parent of 2790962... Reorganize file structure. Prepare for new matrix
