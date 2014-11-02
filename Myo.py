@@ -7,8 +7,6 @@ myo.init('myo/myo.framework', False)
 from myo.six import print_
 
 class Listener(myo.DeviceListener):
-    #return False from any method to stop the Hub
-
     def on_connect(self, myo, timestamp):
         print_("Connected to Myo")
         myo.vibrate('short')
@@ -43,19 +41,22 @@ class Listener(myo.DeviceListener):
     def on_gyroscope_data(self, myo, timestamp, gyroscope):
         pass
 
-def main():
-    hub = myo.Hub()
-    hub.run(1000, Listener())
+class MyoHub(object):
 
-    # Listen to keyboard interrupts and stop the
-    # hub in that case.
-    try:
-        while hub.running:
-            myo.time.sleep(0.2)
-    except KeyboardInterrupt:
-        print_("Quitting ...")
-        hub.stop(True)
+    def __init__(self, listener = None):
+        self.hub = myo.Hub()
+        if listener == None:
+            self.listener = Listener()
+        else:
+            self.listener = listener
 
-if __name__ == '__main__':
-    main()
+    def run(self):
+        self.hub.run(1000, self.listener)
+
+        try:
+            while self.hub.running:
+                myo.time.sleep(0.2)
+        except KeyboardInterrupt:
+            print_("Quitting ...")
+            self.hub.stop(True)
 
