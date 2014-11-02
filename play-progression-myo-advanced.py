@@ -17,6 +17,12 @@ class MingusListener(Myo.Listener):
                 print self.poseMap[pose.name][0][0], value
         super(MingusListener, self).on_pose(myo, timestamp, pose)
 
+    def on_orientation_data(self, myo, timestamp, orientation):
+        pass
+        # print "orientation"
+        # super(MingusListener, self).on_orientation_data(myo, timestamp, orientation)
+        # print "rolle", self.roll_w
+
 from mingus.core import progressions, intervals
 from mingus.core import chords as ch
 from mingus.containers import NoteContainer, Note
@@ -63,15 +69,17 @@ class MingusHub(Myo.MyoHub):
                 if state != currState:
                     missingNotes, extraPitches = currState.getDiff(state)
                     for note in missingNotes:
-                        fluidsynth.play_Note(c.from_int(note[0]), 1, note[1]*listener.volumeScale)
+                        fluidsynth.play_Note(c.from_int(note[0]+listener.noteOffset), 1, note[1]*listener.volumeScale)
                     for pitch in extraPitches:
-                        fluidsynth.stop_Note(c.from_int(pitch), 1)
+                        fluidsynth.stop_Note(c.from_int(pitch+listener.noteOffset), 1)
                     currState = state
 
                 stateHistory.append(currState)
 
                 if len(stateHistory) > MidiSong.MidiSong.maxOrder:
                     stateHistory = stateHistory[-MidiSong.MidiSong.maxOrder:]
+
+                # fluidsynth.modulation(1, listener.roll_w)
 
                 time.sleep(self.tick*self.Song.tracks[0]['width'])
 
@@ -81,14 +89,17 @@ class MingusHub(Myo.MyoHub):
 
 poseMap = {'wave_in': [('volumeScale', -0.05)],
            'wave_out': [('volumeScale', +0.05)],
-           'fist': [('SF2Index', -1),
+           'fist': [('noteOffset', -1),
+                    ('SF2Index', -1),
                     ('tickScale', -1)],
-           'fingers_spread': [('SF2Index', +1),
+           'fingers_spread': [('noteOffset', +1),
+                              ('SF2Index', +1),
                               ('tickScale', +1)]}
 
 listener = MingusListener(poseMap, ('volumeScale', 1),
                                    ('tickScale', 1),
-                                   ('SF2Index', 0))
+                                   ('SF2Index', 0),
+                                   ('noteOffset', 0))
 hub = MingusHub(listener)
 
 hub.run()
