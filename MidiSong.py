@@ -98,7 +98,7 @@ class MidiSong(object):
     # Default class settings
     maxTrackCount = 1
     factorEvents = [midi.NoteOnEvent, midi.NoteOffEvent]
-    maxOrder = 200
+    maxOrder = 50
 
 
     @staticmethod
@@ -147,9 +147,9 @@ tracks.")
         self.isValidTrack(trackIndex)
         track = self.tracks[trackIndex]
         for i in xrange(len(stateHistory)-1):
-            if (stateHistory[i] not in track['matrix'] or
-                stateHistory[i+1] not in track['matrix'][stateHistory[i]]):
-                return False
+            if (stateHistory[i] not in track['matrix'][1] or
+                stateHistory[i+1] not in track['matrix'][1][stateHistory[i]]):
+                return True
         return True
 
 
@@ -217,7 +217,7 @@ of tracks: %d" % MidiSong.maxTrackCount)
     def initMarkovMatrices(self):
         for track in self.tracks:
             track['matrix'] = {}
-            for order in xrange(1, MidiSong.maxOrder):
+            for order in xrange(1, MidiSong.maxOrder+1):
                 track['matrix'][order] = self.getMarkovMatrix(track['states'],
                                                               order)
 
@@ -259,7 +259,9 @@ of tracks: %d" % MidiSong.maxTrackCount)
                 stateHistory = stateHistory[1:]
                 order -= 1
                 if order == 0:
+                    #print order
                     return self.getRandomState(trackIndex)
+            #print order
             totalCount = sum(track['matrix'][order][stateHistory].values())
             selectedCount = random.randrange(1, totalCount + 1)
             currCount = 0
@@ -358,6 +360,6 @@ invalid.")
 
 
 # Testing
-#Song = MidiSong('sample_midi/DukeSingleLonger.mid')
+#Song = MidiSong('sample_midi/LetItGo.mid')
 #NewSong = Song.generateSong(289*10)
-#NewSong.exportToFile('generated_midi/Testing.mid')
+#NewSong.exportToFile('generated_midi/Testing2.mid')
